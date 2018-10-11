@@ -1,0 +1,136 @@
+<html><head>
+<script>
+	
+function setCookie(cname, cvalue, exdays) {
+var html=document.getElementById('editor-html').value;
+var css=document.getElementById('editor-css').value;
+var js=document.getElementById('editor-js').value;
+  //  var d = new Date();
+  //  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+   // var expires = "expires="+d.toUTCString();
+   // document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+   document.cookie="html="+html;
+   document.cookie="css="+css;
+   document.cookie="js="+js;
+    document.getElementById('server').value=html;
+}
+
+function getCookie() {
+var html=document.getElementById('editor-html').value;
+var css=document.getElementById('editor-css').value;
+var js=document.getElementById('editor-js').value;
+ //   var name = cname + "=";
+    var ca = document.cookie.split('=');
+    console.log(document.cookie);
+    document.getElementById('editor-html').value=ca[1].replace('css=','');
+    document.getElementById('editor-css').value=ca[2];
+    document.getElementById('editor-js').value=ca[0];
+
+  console.log(ca[0],ca[1],ca[2]); 
+  
+
+
+   
+}
+
+function checkCookie() {
+    var user = getCookie("username");
+    if (user != "") {
+        alert("Welcome again " + user);
+    } else {
+        user = prompt("Please enter your name:", "");
+        if (user != "" && user != null) {
+            setCookie("username", user, 365);
+        }
+    }
+} 
+function alertCookie() {
+  alert(document.cookie);
+}
+function refresh()
+{
+	var html=document.getElementById('editor-html').value;
+	var css="<style>"+document.getElementById('editor-css').value+"</style>";
+	var js='<script>'+document.getElementById('editor-js').value+'<\/script>';
+	var textContent=css+js+html;
+	document.getElementById('viewer').srcdoc=textContent;
+	//body=frame[0].contentWindow.document;
+}
+document.addEventListener('keypress', (event) => {
+  const keyName = event.key;
+ document.getElementById('outscratch').value=keyName;
+  console.log('keypress event\n\n' + 'key: ' + keyName);
+
+});
+</script>
+<style>	
+
+body{
+  display: grid;
+ background:#ecf0f1; 
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 1px;
+  grid-template-areas: 
+  "html viewer viewer menu" 
+  "css viewer viewer keypress" 
+  "js viewer viewer server";
+}
+*{
+	padding:5px; 
+	margin:0;
+}
+iframe,textarea{
+width:100%;
+height:90%;
+}
+.viewer { grid-area: viewer; }
+.keypress { grid-area: keypress; }
+.server { grid-area: server; }
+.html { grid-area: html; }
+.css { grid-area: css; }
+.js { grid-area: js; }
+.menu { grid-area: menu; }
+.main{
+	
+	display:inline-flex;
+}
+
+#viewer{
+	background:white; 
+	border:none; 
+	width:100%;
+	height:100%;
+}
+</style>
+</head> 
+<body>
+	<div class="viewer">
+	<iframe id="viewer"></iframe>
+  </div>
+  <div class="keypress">
+  <textarea id="outscratch" placeholder="pressakey"></textarea>
+  </div>
+  <div class="html">html
+  		<textarea id="editor-html" onkeyup="refresh()" placeholder="html"></textarea>
+  </div>
+  <div class="css">css
+   <textarea id="editor-css" onkeyup="refresh()" placeholder="css"></textarea>
+  </div>
+  <div class="js">js
+  <textarea id="editor-js" onkeyup="refresh()" placeholder="js"></textarea>
+  </div>
+  <div class="server">
+ <textarea id="server" onkeyup="refresh()" placeholder="servercode"></textarea>
+  </div>
+    <div class="menu">
+	<button id="save" onclick="setCookie()">Save Cookie</button>
+<button onclick="alertCookie()">alert cookies</button>
+<button onclick="getCookie()">Show cookies</button>
+    </div>
+
+</body></html>
